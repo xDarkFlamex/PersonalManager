@@ -1,0 +1,53 @@
+﻿<Window x:Class="PersonalManager.Dialogs.AddAccountDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PersonalManager.Dialogs"
+        mc:Ignorable="d"
+        Title="Добавить новый счет" 
+        Height="300" 
+        Width="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Название счета -->
+        <Label Grid.Row="0" Content="Название счета:"/>
+        <TextBox Grid.Row="1" Text="{Binding NewAccount.AccountName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+        <!-- Тип счета -->
+        <Label Grid.Row="2" Content="Тип счета:"/>
+        <ComboBox Grid.Row="3" 
+                  ItemsSource="{Binding AccountTypes}"
+                  SelectedItem="{Binding NewAccount.AccountType}"
+                  Margin="0,0,0,10">
+            <ComboBox.Items>
+                <ComboBoxItem Content="Наличные"/>
+                <ComboBoxItem Content="Банковская карта"/>
+                <ComboBoxItem Content="Кредитная карта"/>
+                <ComboBoxItem Content="Сберегательный счет"/>
+                <ComboBoxItem Content="Инвестиционный счет"/>
+            </ComboBox.Items>
+        </ComboBox>
+
+        <!-- Начальный баланс -->
+        <Label Grid.Row="4" Content="Начальный баланс:"/>
+        <TextBox Grid.Row="5" Text="{Binding NewAccount.Balance, StringFormat=N2}" Margin="0,0,0,10"/>
+
+        <!-- Кнопки -->
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Отмена" Width="80" Margin="0,0,10,0" Click="Cancel_Click"/>
+            <Button Content="Сохранить" Width="80" Click="Save_Click" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

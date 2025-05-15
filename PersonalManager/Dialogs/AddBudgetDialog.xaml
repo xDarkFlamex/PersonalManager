@@ -1,0 +1,71 @@
+﻿<Window x:Class="PersonalManager.Dialogs.AddBudgetDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PersonalManager.Dialogs"
+        mc:Ignorable="d"
+        Title="Добавить новый бюджет" 
+        Height="400" 
+        Width="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Категория -->
+        <Label Grid.Row="0" Content="Категория:"/>
+        <ComboBox Grid.Row="1" 
+                  ItemsSource="{Binding Categories}"
+                  DisplayMemberPath="Name"
+                  SelectedValuePath="CategoryId"
+                  SelectedValue="{Binding NewBudget.CategoryId}"
+                  Margin="0,0,0,10"/>
+
+        <!-- Сумма бюджета -->
+        <Label Grid.Row="2" Content="Сумма бюджета:"/>
+        <TextBox Grid.Row="3" Text="{Binding NewBudget.Amount, StringFormat=N2}" Margin="0,0,0,10"/>
+
+        <!-- Период -->
+        <Label Grid.Row="4" Content="Период:"/>
+        <ComboBox Grid.Row="5" 
+                  SelectedItem="{Binding NewBudget.Period}"
+                  Margin="0,0,0,10">
+            <ComboBox.Items>
+                <ComboBoxItem Content="Ежедневно"/>
+                <ComboBoxItem Content="Еженедельно"/>
+                <ComboBoxItem Content="Ежемесячно"/>
+                <ComboBoxItem Content="Ежеквартально"/>
+                <ComboBoxItem Content="Ежегодно"/>
+            </ComboBox.Items>
+        </ComboBox>
+
+        <!-- Дата начала -->
+        <Label Grid.Row="6" Content="Дата начала:"/>
+        <DatePicker Grid.Row="7" 
+                    SelectedDate="{Binding NewBudget.StartDate, Converter={StaticResource DateOnlyToDateTimeConverter}}"
+                    Margin="0,0,0,10"/>
+
+        <!-- Дата окончания (опционально) -->
+        <Label Grid.Row="8" Content="Дата окончания (необязательно):"/>
+        <DatePicker Grid.Row="9" 
+                    SelectedDate="{Binding NewBudget.EndDate, Converter={StaticResource DateOnlyToDateTimeConverter}}"
+                    Margin="0,0,0,20"/>
+
+        <!-- Кнопки -->
+        <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Отмена" Width="80" Margin="0,0,10,0" Click="Cancel_Click"/>
+            <Button Content="Сохранить" Width="80" Click="Save_Click" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,180 @@
+﻿<Page x:Class="PersonalManager.Pages.NotesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PersonalManager"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1000"
+      Title="NotesPage"
+      Background="#FFF0F0F0">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Панель списка заметок -->
+        <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="0 0 1 0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Панель поиска и фильтров -->
+                <StackPanel Grid.Row="0" Margin="10" Orientation="Vertical">
+                    <TextBox x:Name="SearchBox" Text="Поиск заметок..." 
+                             Foreground="Gray"
+                             BorderBrush="#FFABADB3" BorderThickness="1"
+                             Padding="5"
+                             TextChanged="SearchBox_TextChanged"
+                             GotFocus="SearchBox_GotFocus"
+                             LostFocus="SearchBox_LostFocus"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Center" Width="229" RenderTransformOrigin="0.485,0.478">
+                        <ToggleButton x:Name="PinnedFilter" Content="Закрепленные" Margin="0,0,5,0"
+                                     Background="#FFDDDDDD" BorderBrush="#FFABADB3"
+                                     Checked="FilterToggle_Checked" Unchecked="FilterToggle_Checked"/>
+                        <ToggleButton x:Name="ArchivedFilter" Content="Архив" Margin="5,0,0,0"
+                                     Background="#FFDDDDDD" BorderBrush="#FFABADB3"
+                                     Checked="FilterToggle_Checked" Unchecked="FilterToggle_Checked"/>
+                        <Button x:Name="ReloadNotes" Content="Перезагрузить" Margin="5,0,0,0"
+                                     Background="#FFDDDDDD" BorderBrush="#FFABADB3"
+                                     Click="ReloadNotes_Click" Width="81"/>
+
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Список заметок -->
+                <ListView Grid.Row="1" x:Name="NotesList" ItemsSource="{Binding Notes}" 
+                          SelectionChanged="NotesList_SelectionChanged"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsPinned}" Value="True">
+                                    <Setter Property="BorderBrush" Value="#FF3F51B5"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="10" Orientation="Vertical">
+                                <TextBlock Text="{Binding Title}" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding Content}" TextTrimming="CharacterEllipsis" 
+                                           MaxHeight="50" Opacity="0.7" Margin="0,5,0,0"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                    <TextBlock Text="{Binding CreatedAt, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
+                                               FontSize="10" Foreground="Gray"/>
+                                    <TextBlock Text=" • " FontSize="10" Foreground="Gray"/>
+                                    <TextBlock Text="{Binding UpdatedAt, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
+                                               FontSize="10" Foreground="Gray"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding NoteAttachments.Count, StringFormat={}Вложений: {0}}"
+                                           FontSize="10" Foreground="Gray" Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Border>
+
+        <!-- Редактор заметки -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Панель инструментов заметки -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,10,10,5">
+                <ToggleButton x:Name="PinButton" Content="Закрепить" Margin="0,0,5,0"
+                              Background="#FFDDDDDD" BorderBrush="#FFABADB3"
+                              Checked="PinButton_Checked" Unchecked="PinButton_Checked"/>
+                <ToggleButton x:Name="ArchiveButton" Content="Архив" Margin="5,0,5,0"
+                              Background="#FFDDDDDD" BorderBrush="#FFABADB3"
+                              Checked="ArchiveButton_Checked" Unchecked="ArchiveButton_Checked"/>
+            </StackPanel>
+
+            <!-- Заголовок и содержимое заметки -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="10,0,10,10">
+                <StackPanel>
+                    <TextBox x:Name="NoteTitle" FontSize="18" Margin="0,0,0,10"
+                             BorderBrush="#FFABADB3" BorderThickness="1"
+                             Padding="5"
+                             Text="Заголовок заметки"
+                             Foreground="Gray"
+                             GotFocus="NoteTitle_GotFocus"
+                             LostFocus="NoteTitle_LostFocus"/>
+
+                    <RichTextBox x:Name="NoteContent" BorderThickness="1" Padding="10"
+                                 BorderBrush="#FFABADB3"
+                                 VerticalScrollBarVisibility="Auto" MinHeight="300">
+                        <RichTextBox.Resources>
+                            <Style TargetType="{x:Type Paragraph}">
+                                <Setter Property="Margin" Value="0"/>
+                            </Style>
+                        </RichTextBox.Resources>
+                    </RichTextBox>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Панель вложений -->
+            <Border Grid.Row="2" BorderBrush="#FFABADB3" BorderThickness="1" Margin="10,0,10,10" Padding="5">
+                <StackPanel>
+                    <TextBlock Text="Вложения:" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ListView x:Name="AttachmentsList" Height="100" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <EventSetter Event="MouseDoubleClick" Handler="Attachment_DoubleClick"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/file-icon.png" Width="16" Height="16" Margin="0,0,5,0"/>
+                                    <Button Content="{Binding FileName}" 
+                                CommandParameter="{Binding AttachmentId}"
+                                Click="OpenAttachment_Click"
+                                Background="Transparent" BorderBrush="Transparent"
+                                HorizontalContentAlignment="Left"
+                                ToolTip="Открыть файл"/>
+                                    <Button Content="×" Margin="5,0,0,0" Padding="5,0,5,0"
+                                CommandParameter="{Binding AttachmentId}"
+                                Click="DeleteAttachment_Click"
+                                Background="Transparent" BorderBrush="Transparent"
+                                Foreground="Red" FontWeight="Bold"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button x:Name="AddAttachmentButton" Content="Добавить вложение" 
+                            Click="AddAttachment_Click" Margin="0,5,0,0"
+                            HorizontalAlignment="Left" Padding="5,2,5,2"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Панель кнопок -->
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Content="Новая заметка" Click="NewNote_Click" Margin="0,0,5,0"
+                        Width="120" Background="#FFDDDDDD" BorderBrush="#FFABADB3"/>
+                <Button Content="Сохранить" Click="SaveNote_Click" Margin="0,0,5,0"
+                        Width="100" Background="#FF3F51B5" Foreground="White"/>
+                <Button Content="Удалить" Click="DeleteNote_Click"
+                        Width="80" Background="#FFDDDDDD" BorderBrush="#FFABADB3"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

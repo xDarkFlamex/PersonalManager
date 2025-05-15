@@ -1,0 +1,28 @@
+﻿<Window x:Class="PersonalManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PersonalManager"
+        mc:Ignorable="d"
+        Title="Персональный менеджер" Height="600" Width="1100">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Левое меню -->
+        <StackPanel Grid.Column="0" Background="#FF2D2D30">
+            <Button x:Name="btnDashboard" Content="Главная" Style="{StaticResource MenuButtonStyle}" Click="BtnDashboard_Click"/>
+            <Button x:Name="btnFinance" Content="Финансы" Style="{StaticResource MenuButtonStyle}" Click="BtnFinance_Click"/>
+            <Button x:Name="btnNotes" Content="Заметки" Style="{StaticResource MenuButtonStyle}" Click="BtnNotes_Click"/>
+            <Button x:Name="btnTasks" Content="Задачи" Style="{StaticResource MenuButtonStyle}" Click="BtnTasks_Click"/>
+            <Button x:Name="btnReports" Content="Отчеты" Style="{StaticResource MenuButtonStyle}" />
+            <Button x:Name="btnSettings" Content="Настройки" Style="{StaticResource MenuButtonStyle}" />
+        </StackPanel>
+
+        <!-- Основной контент -->
+        <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
+    </Grid>
+</Window>

@@ -1,0 +1,97 @@
+﻿<Page x:Class="PersonalManager.Pages.FinancePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PersonalManager"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="FinancePage">
+
+    <Grid>
+        <TabControl>
+            <TabItem Header="Транзакции">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+                        <Button Content="Добавить доход" Click="AddIncome_Click" Margin="0,0,5,0"/>
+                        <Button Content="Добавить расход" Click="AddExpense_Click" Margin="0,0,5,0"/>
+                        <Button Content="Перевод" Click="AddTransfer_Click" Margin="0,0,5,0"/>
+                        <Button Content="Удалить" Click="DeleteTransaction_Click" Margin="0,0,5,0"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1" x:Name="TransactionsGrid" 
+                              ItemsSource="{Binding Transactions}" 
+                              AutoGenerateColumns="False" 
+                              IsReadOnly="True" 
+                              SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}"/>
+                            <DataGridTextColumn Header="Тип" Binding="{Binding TransactionType}"/>
+                            <DataGridTextColumn Header="Сумма" Binding="{Binding Amount, StringFormat={}{0:N2}}"/>
+                            <DataGridTextColumn Header="Категория" Binding="{Binding Category.Name}"/>
+                            <DataGridTextColumn Header="Описание" Binding="{Binding Description}"/>
+                            <DataGridTextColumn Header="Счет" Binding="{Binding Account.AccountName}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Счета">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Row="0" Content="Добавить счет" Click="AddAccount_Click" HorizontalAlignment="Left" Margin="5"/>
+
+                    <DataGrid Grid.Row="1" x:Name="AccountsGrid" 
+                              ItemsSource="{Binding Accounts}" 
+                              AutoGenerateColumns="False" 
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Binding="{Binding AccountName}"/>
+                            <DataGridTextColumn Header="Тип" Binding="{Binding AccountType}"/>
+                            <DataGridTextColumn Header="Баланс" Binding="{Binding Balance, StringFormat={}{0:N2}}"/>
+                            <DataGridTextColumn Header="Валюта" Binding="{Binding Currency}"/>
+                            <DataGridCheckBoxColumn Header="Активен" Binding="{Binding IsActive}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Бюджеты">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Row="0" Content="Добавить бюджет" Click="AddBudget_Click" HorizontalAlignment="Left" Margin="5"/>
+
+                    <DataGrid Grid.Row="1" x:Name="BudgetsGrid" 
+                              ItemsSource="{Binding Budgets}" 
+                              AutoGenerateColumns="False" 
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Категория" Binding="{Binding Category.Name}"/>
+                            <DataGridTextColumn Header="Сумма" Binding="{Binding Amount, StringFormat={}{0:N2}}"/>
+                            <DataGridTextColumn Header="Период" Binding="{Binding Period}"/>
+                            <DataGridTextColumn Header="Начало" Binding="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                            <DataGridTextColumn Header="Окончание" Binding="{Binding EndDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                            <DataGridTextColumn Header="Потрачено" Binding="{Binding CurrentSpent, StringFormat={}{0:N2}}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>
